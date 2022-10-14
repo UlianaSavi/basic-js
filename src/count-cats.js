@@ -27,8 +27,6 @@ function countCats(matrix = []) {
   return cats;
 }
 
-countCats();
-
 module.exports = {
   countCats
 };
