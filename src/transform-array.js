@@ -20,42 +20,29 @@ const {
 const arr = [1, 2, 3, '--discard-next'];
 
 function transform(arr) {
-  if (!Array.isArray(arr)) {
-    throw new Error('\'arr\' parameter must be an instance of the Array!');
+  if (!Array.isArray(arr)) throw new Error("'arr' parameter must be an instance of the Array!");
+  if (arr.length === 0) return arr;
+  let result = arr.slice();
+  for (let i = 0; i < result.length; i++) {
+      if (typeof result[i] === 'string') {
+          if (result[i] === '--discard-next') {
+            delete result[i];
+            delete result[i + 1];
+          }
+          else if (result[i] === '--discard-prev') {
+            delete result[i];
+            delete result[i - 1];
+          }
+          else if (result[i] === '--double-next') {
+              delete result[i];
+              result.splice(i + 1, 0, result[i + 1]);
+          } else if (result[i] === '--double-prev') {
+              delete result[i];
+              result.splice(i, 0, result[i - 1]);
+          }
+      }
   }
-  var arr2 = arr.slice(0);
-  for (let i = 0; i < arr2.length; i++) {
-    if (arr2[i] === '--discard-next' && arr2[i] !== arr2.length - 1) {
-      arr2.splice(i, 2);
-    }
-    if (arr2[i] === '--discard-prev' && arr2[i] !== arr2[0]) {
-      arr2.splice(i - 1, 2);
-    }
-    if (arr2[i] === '--double-next' && arr2[i] !== arr2.length - 1) {
-      arr2[i] = arr2[i + 1];
-    }
-    if (arr2[i] === '--double-prev' && arr2[i] !== arr2[0]) {
-      arr2[i] = arr2[i - 1];
-    }
-
-    if (arr2[i] === '--discard-next' && arr2[i] === arr2.length - 1) {
-      arr2.splice(i, 1);
-    }
-    if (arr2[i] === '--discard-prev' && arr2[i] === arr2[0]) {
-      arr2.splice(i, 1);
-    }
-    if (arr2[i] === '--double-next' && arr2[i] === arr2.length - 1) {
-      arr2.splice(i, 1);
-    }
-    if (arr2[i] === '--double-prev' && arr2[i] === arr2[0]) {
-      arr2.splice(i, 1);
-    }
-    if (arr2[i] === undefined) {
-      arr2.splice(i, 1);
-    }
-  };
-  console.log(arr2);
-  return arr2
+  return result.filter(el => el !== undefined);
 }
 
 transform(arr);
